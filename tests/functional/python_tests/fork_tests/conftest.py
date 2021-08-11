@@ -28,6 +28,7 @@ def world_with_witnesses(request):
         alpha_net.create_witness_node(witnesses=[f'witness{i}-alpha' for i in range(6, 8)])
         alpha_net.create_witness_node(witnesses=[f'witness{i}-alpha' for i in range(8, 10)])
         api_node = alpha_net.create_api_node()
+        api_node2 = alpha_net.create_api_node()
 
         # Create second network
         beta_net = world.create_network('Beta')

@@ -228,10 +228,27 @@ fork_tests:
   script:
     - pip3 install pytest
     - cd tests/functional/python_tests/fork_tests
-    - pytest --junitxml="./report.xml"
+    - pytest -s --junitxml="./report.xml"
   artifacts:
     reports:
       junit: tests/functional/python_tests/fork_tests/report.xml
+  tags:
+    - public-runner-docker
+
+more_fork_tests:
+  stage: test
+  extends: .test_tools_based
+  needs:
+    - job: testnet_node_build
+      artifacts: true
+  image: "$CI_REGISTRY_IMAGE/test$TEST_IMAGE_TAG"
+  script:
+    - pip3 install pytest
+    - cd tests/functional/python_tests/more_fork_tests
+    - pytest -s --junitxml="./report.xml"
+  artifacts:
+    reports:
+      junit: tests/functional/python_tests/more_fork_tests/report.xml
   tags:
     - public-runner-docker
 

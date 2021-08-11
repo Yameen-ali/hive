@@ -4099,6 +4099,10 @@ void database::_apply_block( const signed_block& next_block )
 {
   block_notification note( next_block );
 
+  const auto& gprops = get_dynamic_global_properties();
+  elog("_apply_block: head: ${h}, aslot: ${a}, sec_since_epoch: ${s}",
+    ("h", gprops.head_block_number)("a", gprops.current_aslot)("s", head_block_time().sec_since_epoch()));
+
   try {
   notify_pre_apply_block( note );
 

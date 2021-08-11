@@ -290,6 +290,7 @@ size_t snapshot_base_serializer::worker_common_base::get_serialized_object_cache
 
   void database::undo()
   {
+    elog("PERFORM UNDO");
     for( auto& item : _index_list )
     {
       item->undo();
@@ -306,6 +307,7 @@ size_t snapshot_base_serializer::worker_common_base::get_serialized_object_cache
 
   void database::commit( int64_t revision )
   {
+    elog("PERFORM COMMIT for revision ${r}", ("r", revision));
     for( auto& item : _index_list )
     {
       item->commit( revision );
@@ -314,6 +316,7 @@ size_t snapshot_base_serializer::worker_common_base::get_serialized_object_cache
 
   void database::undo_all()
   {
+    elog("PERFORM UNDO_ALL");
     for( auto& item : _index_list )
     {
       item->undo_all();
