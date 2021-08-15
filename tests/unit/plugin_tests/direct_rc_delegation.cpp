@@ -293,9 +293,6 @@ BOOST_AUTO_TEST_CASE( update_outdel_overflow )
     dvso.delegatee = "martin";
     push_transaction(dvso, alice_private_key);
 
-    idump((alice_rc_after.delegated_rc)(alice_rc_after.received_delegated_rc)(alice_rc_after.rc_manabar.current_mana)(alice_rc_after.last_max_rc));
-    idump((bob_rc_account_after.rc_manabar.current_mana)(bob_rc_account_after.last_max_rc)(dave_rc_account_after.rc_manabar.current_mana)(dave_rc_account_after.last_max_rc)(dave_rc_account_after.received_delegated_rc));
-
     const rc_account_object& bob_rc_account_after_two = db->get< rc_account_object, by_name >("bob");
     const rc_account_object& dave_rc_account_after_two = db->get< rc_account_object, by_name >("dave");
     const rc_account_object& alice_rc_after_two = db->get< rc_account_object, by_name >( "alice" );

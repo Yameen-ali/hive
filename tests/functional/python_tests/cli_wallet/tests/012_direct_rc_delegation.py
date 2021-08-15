@@ -78,7 +78,7 @@ if __name__ == "__main__":
             assert(rc_receiver['received_delegated_rc'] == 20)
             assert(rc_delegator['delegated_rc'] == 20)
             assert(rc_delegator['received_delegated_rc'] == 0)
-            assert(rc_delegator['rc_manabar']['current_mana'] == rc_delegator_before['rc_manabar']['current_mana'] - 53)  # amount remains the same because current rc is not given back from reducing the delegationlog.info("Reducing the delegation to 20 to {}".format(receiver))
+            assert(rc_delegator['rc_manabar']['current_mana'] == rc_delegator_before['rc_manabar']['current_mana'] - 53)  # amount remains the same because current rc is not given back from reducing the delegation
 
             log.info("deleting the delegation to {}".format(receiver))
             wallet.delegate_rc(delegator, receiver, 0, "true")
