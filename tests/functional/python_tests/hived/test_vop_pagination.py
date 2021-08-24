@@ -10,7 +10,7 @@ BLOCK_MAX = 3000000
 BLOCK_MIN = BLOCK_MAX - ( BLOCKS_PER_STEP * STEPS )
 
 
-@fixture(scope='session')
+@fixture
 def main_net(world : World) -> RemoteNode:
   # If someone needs https
   HIVED_MAINNET_PROTOCOL = getenv('HIVED_MAINNET_PROTOCOL')
