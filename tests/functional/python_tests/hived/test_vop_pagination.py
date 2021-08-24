@@ -29,6 +29,7 @@ def main_net(world : World) -> RemoteNode:
       break
 
     for i in ifaddresses(iface_name).setdefault(AF_INET, [{'addr':None}] ):
+      logger.info(i['addr'])
       if i['addr'] is not None and HIVED_MAINNET_ADDRESS == i['addr']:
         logger.debug('detected localhost!')
         HIVED_MAINNET_ADDRESS = HIVED_LOCALHOST_ADDRESS
