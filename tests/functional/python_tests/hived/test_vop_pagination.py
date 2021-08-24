@@ -3,6 +3,7 @@ from test_tools.private.remote_node import RemoteNode
 from test_tools import World, logger
 from pytest import fixture
 from os import getenv
+from time import sleep as delay
 
 STEPS = 20
 BLOCKS_PER_STEP = 100
@@ -12,6 +13,7 @@ BLOCK_MIN = BLOCK_MAX - ( BLOCKS_PER_STEP * STEPS )
 
 @fixture
 def main_net(world : World) -> RemoteNode:
+  return world.create_remote_node('https://api.hive.blog')
   # If someone needs https
   HIVED_MAINNET_PROTOCOL = getenv('HIVED_MAINNET_PROTOCOL')
   if HIVED_MAINNET_PROTOCOL is None:
@@ -21,7 +23,6 @@ def main_net(world : World) -> RemoteNode:
   HIVED_MAINNET_ADDRESS = getenv('HIVED_MAINNET_ADDRESS')
   HIVED_MAINNET_PORT = getenv('HIVED_MAINNET_PORT')
   assert HIVED_MAINNET_ADDRESS is not None
-  assert HIVED_MAINNET_PORT is not None
 
   # https://www.delftstack.com/howto/python/get-ip-address-python/#use-the-netifaces-module-to-get-the-local-ip-address-in-python
   for iface_name in interfaces():
@@ -35,7 +36,9 @@ def main_net(world : World) -> RemoteNode:
         HIVED_MAINNET_ADDRESS = HIVED_LOCALHOST_ADDRESS
         break
 
-  FULL_ADDRESS = f'{HIVED_MAINNET_PROTOCOL}://{HIVED_MAINNET_ADDRESS}:{HIVED_MAINNET_PORT}'
+  FULL_ADDRESS = f'{HIVED_MAINNET_PROTOCOL}://{HIVED_MAINNET_ADDRESS}'
+  if HIVED_MAINNET_PORT is not None:
+    FULL_ADDRESS += f':{HIVED_MAINNET_PORT}'
   logger.debug(f'connecting to mainnet node: {FULL_ADDRESS}')
   return world.create_remote_node(FULL_ADDRESS)
 
@@ -65,6 +68,7 @@ def compress_vops(data : list) -> list:
 
 # this function do call to API
 def get_vops(range_begin : int, range_end : int, start_from_id : int, limit : int, main_net : RemoteNode) -> dict:
+  delay(0.01)
   return main_net.api.account_history.enum_virtual_ops(
     block_range_begin=range_begin,
     block_range_end=range_end,
