@@ -17,6 +17,7 @@ def main_net(world : World) -> RemoteNode:
   if HIVED_MAINNET_PROTOCOL is None:
     HIVED_MAINNET_PROTOCOL = 'http'
 
+  HIVED_LOCALHOST_ADDRESS = '127.0.0.1'
   HIVED_MAINNET_ADDRESS = getenv('HIVED_MAINNET_ADDRESS')
   HIVED_MAINNET_PORT = getenv('HIVED_MAINNET_PORT')
   assert HIVED_MAINNET_ADDRESS is not None
@@ -24,10 +25,14 @@ def main_net(world : World) -> RemoteNode:
 
   # https://www.delftstack.com/howto/python/get-ip-address-python/#use-the-netifaces-module-to-get-the-local-ip-address-in-python
   for iface_name in interfaces():
-    if HIVED_MAINNET_ADDRESS in [i['addr'] for i in ifaddresses(iface_name).setdefault(AF_INET, [{'addr':'No IP addr'}] )]:
-      logger.debug('detected localhost!')
-      HIVED_MAINNET_ADDRESS = '127.0.0.1'
+    if HIVED_MAINNET_ADDRESS == HIVED_LOCALHOST_ADDRESS:
       break
+
+    for i in ifaddresses(iface_name).setdefault(AF_INET, [{'addr':None}] ):
+      if i['addr'] is not None and HIVED_MAINNET_ADDRESS == i['addr']:
+        logger.debug('detected localhost!')
+        HIVED_MAINNET_ADDRESS = HIVED_LOCALHOST_ADDRESS
+        break
 
   FULL_ADDRESS = f'{HIVED_MAINNET_PROTOCOL}://{HIVED_MAINNET_ADDRESS}:{HIVED_MAINNET_PORT}'
   logger.debug(f'connecting to mainnet node: {FULL_ADDRESS}')
@@ -43,7 +48,7 @@ class compressed_vop:
     from hashlib import sha512
     from json import dumps
 
-    self.id = "{}_{}_{}".format( (~0x8000000000000000) & int(vop["operation_id"]), vop["block"], vop["trx_in_block"])
+    self.id = f"{ (~0x8000_0000_0000_0000) & int(vop['operation_id']) }_{ vop['block'] }_{vop['trx_in_block']}"
     self.checksum = sha512( dumps(vop).encode() ).hexdigest()
     # self.content = vop
 
